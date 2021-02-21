@@ -3,11 +3,9 @@ package it.gabrieletondi.telldontaskkata.useCase;
 import it.gabrieletondi.telldontaskkata.domain.Order;
 import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
 import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class OrderApprovalUseCaseTest {
     private final TestOrderRepository orderRepository = new TestOrderRepository();
@@ -27,7 +25,8 @@ public class OrderApprovalUseCaseTest {
         useCase.run(request);
 
         final Order savedOrder = orderRepository.getSavedOrder();
-        assertThat(savedOrder.getStatus(), is(OrderStatus.APPROVED));
+        assertThat(savedOrder.getStatus())
+            .isEqualByComparingTo(OrderStatus.APPROVED);
     }
 
     @Test
@@ -44,10 +43,11 @@ public class OrderApprovalUseCaseTest {
         useCase.run(request);
 
         final Order savedOrder = orderRepository.getSavedOrder();
-        assertThat(savedOrder.getStatus(), is(OrderStatus.REJECTED));
+        assertThat(savedOrder.getStatus())
+            .isEqualByComparingTo(OrderStatus.REJECTED);
     }
 
-    @Test(expected = RejectedOrderCannotBeApprovedException.class)
+    @Test
     public void cannotApproveRejectedOrder() throws Exception {
         Order initialOrder = new Order();
         initialOrder.setStatus(OrderStatus.REJECTED);
@@ -58,12 +58,15 @@ public class OrderApprovalUseCaseTest {
         request.setOrderId(1);
         request.setApproved(true);
 
-        useCase.run(request);
+        assertThatThrownBy(() -> {
+            useCase.run(request);
+        }).isInstanceOf(RejectedOrderCannotBeApprovedException.class);
 
-        assertThat(orderRepository.getSavedOrder(), is(nullValue()));
+        assertThat(orderRepository.getSavedOrder())
+            .isNull();
     }
 
-    @Test(expected = ApprovedOrderCannotBeRejectedException.class)
+    @Test
     public void cannotRejectApprovedOrder() throws Exception {
         Order initialOrder = new Order();
         initialOrder.setStatus(OrderStatus.APPROVED);
@@ -74,12 +77,15 @@ public class OrderApprovalUseCaseTest {
         request.setOrderId(1);
         request.setApproved(false);
 
-        useCase.run(request);
+        assertThatThrownBy(() -> {
+            useCase.run(request);
+        }).isInstanceOf(ApprovedOrderCannotBeRejectedException.class);
 
-        assertThat(orderRepository.getSavedOrder(), is(nullValue()));
+        assertThat(orderRepository.getSavedOrder())
+            .isNull();
     }
 
-    @Test(expected = ShippedOrdersCannotBeChangedException.class)
+    @Test
     public void shippedOrdersCannotBeApproved() throws Exception {
         Order initialOrder = new Order();
         initialOrder.setStatus(OrderStatus.SHIPPED);
@@ -90,12 +96,15 @@ public class OrderApprovalUseCaseTest {
         request.setOrderId(1);
         request.setApproved(true);
 
-        useCase.run(request);
+        assertThatThrownBy(() -> {
+            useCase.run(request);
+        }).isInstanceOf(ShippedOrdersCannotBeChangedException.class);
 
-        assertThat(orderRepository.getSavedOrder(), is(nullValue()));
+        assertThat(orderRepository.getSavedOrder())
+            .isNull();
     }
 
-    @Test(expected = ShippedOrdersCannotBeChangedException.class)
+    @Test
     public void shippedOrdersCannotBeRejected() throws Exception {
         Order initialOrder = new Order();
         initialOrder.setStatus(OrderStatus.SHIPPED);
@@ -106,8 +115,11 @@ public class OrderApprovalUseCaseTest {
         request.setOrderId(1);
         request.setApproved(false);
 
-        useCase.run(request);
+        assertThatThrownBy(() -> {
+            useCase.run(request);
+        }).isInstanceOf(ShippedOrdersCannotBeChangedException.class);
 
-        assertThat(orderRepository.getSavedOrder(), is(nullValue()));
+        assertThat(orderRepository.getSavedOrder())
+            .isNull();
     }
 }
