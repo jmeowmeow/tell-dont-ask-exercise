@@ -1,5 +1,7 @@
 # "Tell, Don't Ask" Exercise
 
+> Forked in August 2021 from https://github.com/jitterted/tell-dont-ask-exercise to share for a collaborative work session on this exercise.
+> 
 > This was forked from https://github.com/racingDeveloper/tell-dont-ask-kata -- [@racingDeveloper](https://twitter.com/racingDeveloper) on Twitter.
 > 
 > I've updated JUnit to the JUnit 5, and replaced Hamcrest, etc. with AssertJ assertions.
