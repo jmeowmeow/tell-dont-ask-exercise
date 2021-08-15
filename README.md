@@ -6,7 +6,7 @@
 > 
 > I've updated JUnit to the JUnit 5, and replaced Hamcrest, etc. with AssertJ assertions.
 > 
-> Also replaced references to "kata" to be "exercise"
+> Also replaced references to "kata" to be "exercise".
 
 A legacy refactor exercise, focused on the violation of the [tell don't ask](https://toolshed.com/articles/1998-07-01-TellDontAsk.html) principle and the [anemic domain model](https://martinfowler.com/bliki/AnemicDomainModel.html).
 
