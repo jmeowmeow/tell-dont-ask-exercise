@@ -1,4 +1,4 @@
-package it.gabrieletondi.telldontask.useCase;
+package it.gabrieletondi.telldontask.useCase.creation;
 
 public class SellItemRequest {
     private int quantity;

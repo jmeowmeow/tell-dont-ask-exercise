@@ -1,4 +1,4 @@
-package it.gabrieletondi.telldontask.useCase;
+package it.gabrieletondi.telldontask.useCase.shipment;
 
 public class OrderCannotBeShippedTwiceException extends RuntimeException {
 }

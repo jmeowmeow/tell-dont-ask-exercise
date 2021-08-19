@@ -1,8 +1,9 @@
-package it.gabrieletondi.telldontask.useCase;
+package it.gabrieletondi.telldontask.useCase.approval;
 
 import it.gabrieletondi.telldontask.domain.Order;
 import it.gabrieletondi.telldontask.domain.OrderStatus;
 import it.gabrieletondi.telldontask.repository.OrderRepository;
+import it.gabrieletondi.telldontask.useCase.shipment.ShippedOrdersCannotBeChangedException;
 
 public class OrderApprovalUseCase {
     private final OrderRepository orderRepository;

@@ -7,6 +7,10 @@ import it.gabrieletondi.telldontask.domain.Product;
 import it.gabrieletondi.telldontask.doubles.InMemoryProductCatalog;
 import it.gabrieletondi.telldontask.doubles.TestOrderRepository;
 import it.gabrieletondi.telldontask.repository.ProductCatalog;
+import it.gabrieletondi.telldontask.useCase.creation.OrderCreationUseCase;
+import it.gabrieletondi.telldontask.useCase.creation.SellItemRequest;
+import it.gabrieletondi.telldontask.useCase.creation.SellItemsRequest;
+import it.gabrieletondi.telldontask.useCase.creation.UnknownProductException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

@@ -4,6 +4,10 @@ import it.gabrieletondi.telldontask.domain.Order;
 import it.gabrieletondi.telldontask.domain.OrderStatus;
 import it.gabrieletondi.telldontask.doubles.TestOrderRepository;
 import it.gabrieletondi.telldontask.doubles.TestShipmentService;
+import it.gabrieletondi.telldontask.useCase.shipment.OrderCannotBeShippedException;
+import it.gabrieletondi.telldontask.useCase.shipment.OrderCannotBeShippedTwiceException;
+import it.gabrieletondi.telldontask.useCase.shipment.OrderShipmentRequest;
+import it.gabrieletondi.telldontask.useCase.shipment.OrderShipmentUseCase;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;

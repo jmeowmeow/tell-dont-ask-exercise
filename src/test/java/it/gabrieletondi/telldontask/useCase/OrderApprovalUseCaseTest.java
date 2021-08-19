@@ -3,6 +3,11 @@ package it.gabrieletondi.telldontask.useCase;
 import it.gabrieletondi.telldontask.domain.Order;
 import it.gabrieletondi.telldontask.domain.OrderStatus;
 import it.gabrieletondi.telldontask.doubles.TestOrderRepository;
+import it.gabrieletondi.telldontask.useCase.approval.ApprovedOrderCannotBeRejectedException;
+import it.gabrieletondi.telldontask.useCase.approval.OrderApprovalRequest;
+import it.gabrieletondi.telldontask.useCase.approval.OrderApprovalUseCase;
+import it.gabrieletondi.telldontask.useCase.approval.RejectedOrderCannotBeApprovedException;
+import it.gabrieletondi.telldontask.useCase.shipment.ShippedOrdersCannotBeChangedException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
