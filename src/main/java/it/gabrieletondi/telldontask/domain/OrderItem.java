@@ -9,6 +9,14 @@ public class OrderItem {
     private BigDecimal taxedAmount; // price?
     private BigDecimal tax;
 
+    public OrderItem() {
+    }
+
+    public OrderItem(Product product, int quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+
     public Product getProduct() {
         return product;
     }

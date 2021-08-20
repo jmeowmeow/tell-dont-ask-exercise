@@ -30,16 +30,23 @@ public class OrderCreationUseCase {
         for (SellItemRequest itemRequest : request.getRequests()) {
             Product product = productCatalog.getByName(itemRequest.getProductName());
 
-            final BigDecimal unitaryTax = product.getPrice().divide(valueOf(100)).multiply(product.getCategory().getTaxPercentage()).setScale(2, HALF_UP);
-            final BigDecimal unitaryTaxedAmount = product.getPrice().add(unitaryTax).setScale(2, HALF_UP);
-            final BigDecimal taxedAmount = unitaryTaxedAmount.multiply(BigDecimal.valueOf(itemRequest.getQuantity())).setScale(2, HALF_UP);
-            final BigDecimal taxAmount = unitaryTax.multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
+            // OrderItem.applyTax() ||  ProductPrice, Category - knows the %
+            int quantity = itemRequest.getQuantity();
 
-            final OrderItem orderItem = new OrderItem();
-            orderItem.setProduct(product);
-            orderItem.setQuantity(itemRequest.getQuantity());
+            // Product 120 ---> 120 / 100 --> 1.2 * 15 --> 18
+            final BigDecimal taxPerSingleItem = product.calculateTax();
+
+            // 120 + 18
+            final BigDecimal priceWithTax = product.priceWithTax();
+
+            final BigDecimal taxAmount = taxPerSingleItem.multiply(BigDecimal.valueOf(quantity));
+            final BigDecimal taxedAmount = priceWithTax.multiply(BigDecimal.valueOf(quantity)).setScale(2, HALF_UP);
+
+            final OrderItem orderItem = new OrderItem(product, quantity);
+
             orderItem.setTax(taxAmount);
             orderItem.setTaxedAmount(taxedAmount);
+
             order.getItems().add(orderItem);
 
             order.setTotal(order.getTotal().add(taxedAmount));
@@ -53,10 +60,13 @@ public class OrderCreationUseCase {
         Set<String> productNames = request.productNames();
         for (String productName : productNames) {
             Product product = productCatalog.getByName(productName);
+            requireIsFound(product);
+        }
+    }
 
-            if (product == null) {
-                throw new UnknownProductException();
-            }
+    private void requireIsFound(Product product) {
+        if (product == null) {
+            throw new UnknownProductException();
         }
     }
 }
