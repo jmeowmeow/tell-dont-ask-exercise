@@ -10,10 +10,7 @@ public class TestOrderRepository implements OrderRepository {
     private Order insertedOrder;
     private List<Order> orders = new ArrayList<>();
 
-    public Order getSavedOrder() {
-        return insertedOrder;
-    }
-
+    @Override
     public void save(Order order) {
         this.insertedOrder = order;
     }
@@ -26,4 +23,9 @@ public class TestOrderRepository implements OrderRepository {
     public void addOrder(Order order) {
         this.orders.add(order);
     }
+
+    public Order getSavedOrder() {
+        return insertedOrder;
+    }
+
 }

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Product {
     private String name;
-    private BigDecimal price;
+    private BigDecimal price; // units?
     private Category category;
 
     public String getName() {

@@ -3,9 +3,10 @@ package it.gabrieletondi.telldontask.domain;
 import java.math.BigDecimal;
 
 public class OrderItem {
+
     private Product product;
     private int quantity;
-    private BigDecimal taxedAmount;
+    private BigDecimal taxedAmount; // price?
     private BigDecimal tax;
 
     public Product getProduct() {

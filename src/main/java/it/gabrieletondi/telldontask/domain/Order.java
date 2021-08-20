@@ -4,12 +4,16 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class Order {
-    private BigDecimal total;
-    private String currency;
-    private List<OrderItem> items;
-    private BigDecimal tax;
-    private OrderStatus status;
+
     private int id;
+    private OrderStatus status;
+
+    private BigDecimal total; // Money?
+    private String currency;
+
+    private BigDecimal tax; // Money?
+
+    private List<OrderItem> items;
 
     public BigDecimal getTotal() {
         return total;

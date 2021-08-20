@@ -41,6 +41,20 @@ public class OrderCreationUseCaseTest {
     );
     private final OrderCreationUseCase useCase = new OrderCreationUseCase(orderRepository, productCatalog);
 
+
+    @Test
+    public void sellZeroItems() throws Exception{
+        final SellItemsRequest request = new SellItemsRequest();
+        request.setRequests(new ArrayList<>());
+        useCase.run(request);
+        final Order insertedOrder = orderRepository.getSavedOrder();
+        assertThat(insertedOrder).isNotNull();
+        assertThat(insertedOrder.getTotal()).isZero();
+        assertThat(insertedOrder.getItems()).isEmpty();
+        assertThat(insertedOrder.getTax()).isZero();
+        assertThat(insertedOrder.getStatus()).isEqualByComparingTo(OrderStatus.CREATED);
+    }
+
     @Test
     public void sellMultipleItems() throws Exception {
         SellItemRequest saladRequest = new SellItemRequest();
