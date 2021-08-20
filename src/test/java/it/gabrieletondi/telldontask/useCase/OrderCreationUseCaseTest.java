@@ -5,7 +5,9 @@ import it.gabrieletondi.telldontask.domain.Order;
 import it.gabrieletondi.telldontask.domain.OrderStatus;
 import it.gabrieletondi.telldontask.domain.Product;
 import it.gabrieletondi.telldontask.doubles.InMemoryProductCatalog;
+import it.gabrieletondi.telldontask.doubles.OrderRepositorySpy;
 import it.gabrieletondi.telldontask.doubles.TestOrderRepository;
+import it.gabrieletondi.telldontask.repository.OrderRepository;
 import it.gabrieletondi.telldontask.repository.ProductCatalog;
 import it.gabrieletondi.telldontask.useCase.creation.OrderCreationUseCase;
 import it.gabrieletondi.telldontask.useCase.creation.SellItemRequest;
@@ -17,41 +19,58 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class OrderCreationUseCaseTest {
-    private final TestOrderRepository orderRepository = new TestOrderRepository();
+
+    private final OrderRepository orderRepository = new TestOrderRepository();
+    private final OrderRepositorySpy orderRepositorySpy = (OrderRepositorySpy) orderRepository;
+
     private Category food = new Category() {{
         setName("food");
         setTaxPercentage(new BigDecimal("10"));
     }};
     private final ProductCatalog productCatalog = new InMemoryProductCatalog(
         List.of(
-                new Product() {{
-                    setName("salad");
-                    setPrice(new BigDecimal("3.56"));
-                    setCategory(food);
-                }},
-                new Product() {{
-                    setName("tomato");
-                    setPrice(new BigDecimal("4.65"));
-                    setCategory(food);
-                }}
-            )
+            new Product() {{
+                setName("salad");
+                setPrice(new BigDecimal("3.56"));
+                setCategory(food);
+            }},
+            new Product() {{
+                setName("tomato");
+                setPrice(new BigDecimal("4.65"));
+                setCategory(food);
+            }}
+        )
     );
     private final OrderCreationUseCase useCase = new OrderCreationUseCase(orderRepository, productCatalog);
 
-
     @Test
-    public void sellZeroItems() throws Exception{
+    public void sellZeroItems() throws Exception {
         final SellItemsRequest request = new SellItemsRequest();
         request.setRequests(new ArrayList<>());
+
         useCase.run(request);
-        final Order insertedOrder = orderRepository.getSavedOrder();
+
+        final Order insertedOrder = orderRepositorySpy.getSavedOrder();
         assertThat(insertedOrder).isNotNull();
         assertThat(insertedOrder.getTotal()).isZero();
         assertThat(insertedOrder.getItems()).isEmpty();
         assertThat(insertedOrder.getTax()).isZero();
+        assertThat(insertedOrder.getStatus()).isEqualByComparingTo(OrderStatus.CREATED);
+    }
+
+    @Test
+    void sellOneItem() throws Exception {
+        final SellItemsRequest request = new SellItemsRequest(
+            List.of(
+                new SellItemRequest("tomato", 3)));
+
+        useCase.run(request);
+
+        final Order insertedOrder = orderRepositorySpy.getSavedOrder();
         assertThat(insertedOrder.getStatus()).isEqualByComparingTo(OrderStatus.CREATED);
     }
 
@@ -72,7 +91,7 @@ public class OrderCreationUseCaseTest {
 
         useCase.run(request);
 
-        final Order insertedOrder = orderRepository.getSavedOrder();
+        final Order insertedOrder = orderRepositorySpy.getSavedOrder();
         assertThat(insertedOrder.getStatus())
             .isEqualByComparingTo(OrderStatus.CREATED);
         assertThat(insertedOrder.getTotal())

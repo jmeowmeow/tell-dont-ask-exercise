@@ -6,7 +6,7 @@ import it.gabrieletondi.telldontask.repository.OrderRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestOrderRepository implements OrderRepository {
+public class TestOrderRepository implements OrderRepository, OrderRepositorySpy {
     private Order insertedOrder;
     private List<Order> orders = new ArrayList<>();
 
@@ -20,12 +20,13 @@ public class TestOrderRepository implements OrderRepository {
         return orders.stream().filter(o -> o.getId() == orderId).findFirst().get();
     }
 
+    @Override
     public void addOrder(Order order) {
         this.orders.add(order);
     }
 
+    @Override
     public Order getSavedOrder() {
         return insertedOrder;
     }
-
 }

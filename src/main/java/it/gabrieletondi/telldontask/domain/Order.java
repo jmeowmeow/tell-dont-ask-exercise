@@ -1,19 +1,31 @@
 package it.gabrieletondi.telldontask.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
 
     private int id;
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.CREATED;
 
-    private BigDecimal total; // Money?
+    private BigDecimal total = new BigDecimal("0.00"); // Money?
     private String currency;
 
-    private BigDecimal tax; // Money?
+    private BigDecimal tax = new BigDecimal("0.00"); // Money?
 
-    private List<OrderItem> items;
+    private List<OrderItem> items = new ArrayList<>();
+
+    public Order() {
+    }
+
+    public Order(String currency) {
+        this.currency = currency;
+    }
+
+    // add items
+    // reject order
+    // ship order
 
     public BigDecimal getTotal() {
         return total;
