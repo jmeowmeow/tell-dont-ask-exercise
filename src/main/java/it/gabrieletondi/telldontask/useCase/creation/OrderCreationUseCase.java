@@ -9,6 +9,7 @@ import it.gabrieletondi.telldontask.repository.ProductCatalog;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Set;
 
 import static java.math.BigDecimal.valueOf;
 import static java.math.RoundingMode.HALF_UP;
@@ -25,6 +26,8 @@ public class OrderCreationUseCase {
     public void run(SellItemsRequest request) {
         Order order = new Order("EUR");
 
+        // assume that it is OK to repeatedly query product catalog (cached)
+        validateProducts(request);
         for (SellItemRequest itemRequest : request.getRequests()) {
             Product product = productCatalog.getByName(itemRequest.getProductName());
 
@@ -50,5 +53,16 @@ public class OrderCreationUseCase {
         }
 
         orderRepository.save(order);
+    }
+
+    private void validateProducts(SellItemsRequest request) {
+        Set<String> productNames = request.productNames();
+        for (String productName : productNames) {
+            Product product = productCatalog.getByName(productName);
+
+            if (product == null) {
+                throw new UnknownProductException();
+            }
+        }
     }
 }

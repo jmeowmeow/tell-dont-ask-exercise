@@ -2,6 +2,8 @@ package it.gabrieletondi.telldontask.useCase.creation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SellItemsRequest {
 
@@ -22,5 +24,9 @@ public class SellItemsRequest {
 
     public List<SellItemRequest> getRequests() {
         return requests;
+    }
+
+    public Set<String> productNames() {
+        return requests.stream().map(SellItemRequest::getProductName).collect(Collectors.toSet());
     }
 }
